@@ -1,0 +1,19 @@
+.wallet {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wallet__card {
+  min-width: 100px;
+  height: 40px;
+  background-color: #1890ff;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  line-height: normal;
+}
