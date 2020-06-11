@@ -4,7 +4,7 @@ const initialState = {
   wallet: {
     EUR: { currency: 'EUR', amount: 200 },
     USD: { currency: 'USD', amount: 12000 },
-    GBP: { currency: 'GBP', amount: 0 },
+    GBP: { currency: 'GBP', amount: 10 },
   },
   operationsHistory: [
     {
@@ -18,9 +18,13 @@ const initialState = {
       date: 1591604300973,
     },
   ],
-  exchangeRates: [],
+  exchangeRates: {
+    EUR: 18.8935,
+    USD: 1.1294,
+    GBP: 0.8912,
+  },
   isLoaded: false,
-  amount: 0,
+  amount: null,
   currencyFrom: 'USD',
   currencyTo: 'EUR',
 };

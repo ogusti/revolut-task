@@ -34,13 +34,15 @@ export function fetchExchangeRates() {
     const { currencyFrom } = getState();
     dispatch(fetchData());
 
-    const { data } = await axios.get('https://api.exchangeratesapi.io/latest', {
+    const {
+      data: { rates },
+    } = await axios.get('https://api.exchangeratesapi.io/latest', {
       params: {
         base: currencyFrom,
       },
     });
 
-    dispatch(setExchangeRates(data));
+    dispatch(setExchangeRates(rates));
   };
 }
 
@@ -55,34 +57,44 @@ export function exchangeCurrency(data) {
       exchangeRates,
     } = getState();
 
-    const currencyFromInWallet = wallet[currencyFrom];
-    const currencyToInWallet = wallet[currencyTo];
-    const fromResult = currencyFromInWallet.amount - amount;
-    const toResult =
-      currencyToInWallet.amount + amount * exchangeRates.rates[currencyTo];
-    const updatedCurrencyFromInWallet = {
-      ...currencyFromInWallet,
-      amount: fromResult,
+    const walletFrom = wallet[currencyFrom];
+    const walletTo = wallet[currencyTo];
+
+    const subtrahendAmount = amount;
+    const sumAmount = amount * exchangeRates[currencyTo];
+
+    const updatedWalletFrom = {
+      ...walletFrom,
+      amount: walletFrom.amount - subtrahendAmount,
     };
-    const updatedCurrencyToInWallet = {
-      ...currencyToInWallet,
-      amount: toResult,
+    const updatedWalletTo = {
+      ...walletTo,
+      amount: walletTo.amount + sumAmount,
+    };
+
+    const historyFrom = {
+      ...walletFrom,
+      amount: subtrahendAmount,
+    };
+    const historyTo = {
+      ...walletTo,
+      amount: sumAmount,
     };
 
     const operationInfo = {
-      from: updatedCurrencyFromInWallet,
-      to: updatedCurrencyToInWallet,
+      from: historyFrom,
+      to: historyTo,
       date: Date.now(),
     };
 
     dispatch(
       updateWallet({
         ...wallet,
-        [currencyFrom]: updatedCurrencyFromInWallet,
-        [currencyTo]: updatedCurrencyToInWallet,
+        [currencyFrom]: updatedWalletFrom,
+        [currencyTo]: updatedWalletTo,
       })
     );
 
-    dispatch(updateHistory([...operationsHistory, operationInfo]));
+    dispatch(updateHistory([operationInfo, ...operationsHistory]));
   };
 }
