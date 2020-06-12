@@ -8,6 +8,11 @@
   min-height: 400px;
 }
 
+.converter__currency-rate {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
 .converter__swap-button {
   border: none;
 }

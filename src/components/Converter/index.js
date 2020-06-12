@@ -27,7 +27,7 @@ const Converter = (props) => {
   const [form] = Form.useForm();
 
   const {
-    fetchExchangeRatesData,
+    getExchangeRates,
     currencyFrom,
     currencyTo,
     exchangeRates,
@@ -73,11 +73,12 @@ const Converter = (props) => {
   );
 
   useEffect(() => {
-    fetchExchangeRatesData();
-    // const interval = setInterval(() => fetchExchangeRatesData(), 10000);
+    getExchangeRates();
+
+    // const interval = setInterval(() => getExchangeRates(), 10000);
 
     // return () => clearInterval(interval);
-  }, [fetchExchangeRatesData]);
+  }, [getExchangeRates, currencyFrom]);
 
   useEffect(() => {
     typedAmount.value !== null && onNumberChange(typedAmount.value);
@@ -97,7 +98,7 @@ const Converter = (props) => {
 
   return (
     <Content className="converter">
-      <div>
+      <div className="converter__currency-rate">
         1 {wallet[currencyFrom].symbol} = {exchangeRates[currencyTo]}{' '}
         {wallet[currencyTo].symbol}
       </div>
@@ -176,7 +177,7 @@ const Converter = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchExchangeRatesData: () => {
+  getExchangeRates: () => {
     dispatch(fetchExchangeRates());
   },
   updateCurrencyFrom: (updatedCurrency) => {
