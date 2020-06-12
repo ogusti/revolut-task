@@ -1,9 +1,21 @@
+.history__wrap {
+  background-color: white;
+  padding: 10px 0 0 0;
+}
+
+.history__divider {
+  color: '#333' !important;
+  font-weight: normal !important;
+}
+
 .history {
   display: flex;
   flex-direction: column;
   align-items: center;
   list-style: none;
+  background-color: white;
 }
+
 .history__operation {
   display: flex;
   flex-direction: column;
