@@ -1,12 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  fetchExchangeRates,
-  changeCurrencyFrom,
-  changeCurrencyTo,
-  onChangeAmountField,
-  exchangeCurrency,
-} from '../../store/actions';
 import { Layout } from 'antd';
 import './Wallet.css';
 
@@ -48,32 +41,8 @@ const Wallet = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchExchangeRatesData: () => {
-    dispatch(fetchExchangeRates());
-  },
-  updateCurrencyFrom: (updatedCurrency) => {
-    dispatch(changeCurrencyFrom(updatedCurrency));
-  },
-  updateCurrencyTo: (updatedCurrency) => {
-    dispatch(changeCurrencyTo(updatedCurrency));
-  },
-  onChangeAmount: (updatedAmount) => {
-    dispatch(onChangeAmountField(updatedAmount));
-  },
-  onExchangeCurrency: () => {
-    dispatch(exchangeCurrency());
-  },
-});
-
 const mapStateToProps = (state) => ({
-  isLoaded: state.isLoaded,
-  exchangeRates: state.exchangeRates,
-  currencyFrom: state.currencyFrom,
-  currencyTo: state.currencyTo,
-  amount: state.amount,
   wallet: state.wallet,
-  operationsHistory: state.operationsHistory,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
+export default connect(mapStateToProps)(Wallet);

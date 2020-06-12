@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import {
   fetchExchangeRates,
   changeCurrencyFrom,
   changeCurrencyTo,
-  onChangeAmountField,
   exchangeCurrency,
 } from '../../store/actions';
 import {
   Layout,
   Row,
-  Col,
   Button,
   Select,
-  Radio,
-  Typography,
   Form,
-  Input,
   Statistic,
   InputNumber,
 } from 'antd';
 import { SwapOutlined, ArrowRightOutlined } from '@ant-design/icons';
-
 import './Converter.css';
 
 const { Content } = Layout;
@@ -34,47 +28,57 @@ const values = [
 
 const { Option } = Select;
 
-const regex = /^(?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$/gm;
-
-function validatePrimeNumber(number) {
-  if (number === 11) {
-    return {
-      validateStatus: 'success',
-      errorMsg: null,
-    };
-  }
-
-  return {
-    validateStatus: 'error',
-    errorMsg: 'The prime between 8 and 12 is 11!',
-  };
-}
-
 const Converter = (props) => {
-  const [number, setNumber] = useState({
-    value: 11,
-  });
+  const [typedAmount, setNumber] = useState({ value: null });
   const [form] = Form.useForm();
-
-  const tips =
-    'A prime is a natural number greater than 1 that has no positive divisors other than 1 and itself.';
-
-  const onNumberChange = (value) => {
-    setNumber({ ...validatePrimeNumber(value), value });
-  };
 
   const {
     fetchExchangeRatesData,
     currencyFrom,
-    exchangeRates,
     currencyTo,
+    exchangeRates,
     updateCurrencyFrom,
     updateCurrencyTo,
-    amount,
-    onChangeAmount,
     onExchangeCurrency,
     wallet,
   } = props;
+
+  const validateNumber = useCallback(
+    (number) => {
+      if (wallet[currencyFrom].amount === 0) {
+        return {
+          validateStatus: 'error',
+          errorMessage: `you're out of ${currencyFrom}`,
+        };
+      }
+      if (number <= 0) {
+        return {
+          validateStatus: 'error',
+          errorMessage: 'Must be more than 0 ',
+        };
+      }
+      if (number > wallet[currencyFrom].amount) {
+        return {
+          validateStatus: 'error',
+          errorMessage: `Must be less then ${currencySymbol(currencyFrom)}${
+            wallet[currencyFrom].amount
+          }`,
+        };
+      } else
+        return {
+          validateStatus: 'success',
+          errorMessage: null,
+        };
+    },
+    [currencyFrom, wallet]
+  );
+
+  const onNumberChange = useCallback(
+    (value) => {
+      setNumber({ ...validateNumber(value), value });
+    },
+    [validateNumber]
+  );
 
   useEffect(() => {
     fetchExchangeRatesData();
@@ -83,12 +87,18 @@ const Converter = (props) => {
     // return () => clearInterval(interval);
   }, [fetchExchangeRatesData]);
 
+  useEffect(() => {
+    typedAmount.value !== null && onNumberChange(typedAmount.value);
+  }, [currencyFrom, currencyTo, typedAmount.value, onNumberChange]);
+
   const currencySymbol = (currency) =>
     values.find(({ value }) => value === currency).symbol;
 
-  const hasValidationErrors =
-    !form.isFieldsTouched() ||
-    form.getFieldsError().filter(({ errors }) => errors.length).length;
+  const onFinish = () => {
+    form.resetFields();
+    setNumber({ value: null });
+    onExchangeCurrency(typedAmount.value);
+  };
 
   return (
     <Content className="converter">
@@ -96,105 +106,80 @@ const Converter = (props) => {
         1 {currencySymbol(currencyFrom)} = {exchangeRates[currencyTo]}{' '}
         {currencySymbol(currencyTo)}
       </div>
-      <div>
-        <Form size="large" form={form}>
-          <Row>
-            <Form.Item>
-              <Select
-                onChange={(value) => {
-                  updateCurrencyFrom(value);
-                  value === currencyTo && updateCurrencyTo(currencyFrom);
-                }}
-                value={currencyFrom}
-              >
-                {values.map((item) => (
-                  <Option key={item.value} value={item.value}>
-                    {item.value}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="amountValue"
-              rules={[
-                { required: true, message: 'Please input amount of money' },
-                {
-                  type: 'number',
-                  min: 1,
-                  message: 'Price must be greater than zero',
-                },
-                {
-                  type: 'number',
-                  max: wallet[currencyFrom].amount,
-                  message: 'You dont have such money',
-                },
-              ]}
+      <Form onFinish={onFinish} size="large" form={form}>
+        <Row>
+          <Form.Item>
+            <Select
+              onChange={(value) => {
+                updateCurrencyFrom(value);
+                value === currencyTo && updateCurrencyTo(currencyFrom);
+              }}
+              value={currencyFrom}
             >
-              <InputNumber
-                className="converter__input"
-                min={0}
-                max={wallet[currencyFrom].amount}
-                // formatter={(value) => {
-                //   return value.replace(regex, '');
-                // }}
-                // parser={(value) => {
-                //   return value.replace(regex, '');
-                // }}
-                onChange={onChangeAmount}
-                autoFocus
-                value={amount} // ??
-                suffix={currencySymbol(currencyFrom)}
-                type="number"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                className="converter__swap-button"
-                onClick={() => {
-                  updateCurrencyFrom(currencyTo);
-                  updateCurrencyTo(currencyFrom);
-                }}
-                icon={<SwapOutlined />}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Select
-                onChange={(value) => {
-                  updateCurrencyTo(value);
-                  value === currencyFrom && updateCurrencyFrom(currencyTo);
-                }}
-                value={currencyTo}
-              >
-                {values.map((item) => (
-                  <Option key={item.value} value={item.value}>
-                    {item.value}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <Button
-                className="converter__exchange-button"
-                onClick={() => {
-                  onExchangeCurrency();
-                }}
-                type="primary"
-                icon={<ArrowRightOutlined />}
-                disabled={hasValidationErrors}
-              />
-            </Form.Item>
-          </Row>
-        </Form>
-      </div>
+              {values.map((item) => (
+                <Option key={item.value} value={item.value}>
+                  {item.value}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="amountValue"
+            validateStatus={typedAmount.validateStatus}
+            help={typedAmount.errorMessage}
+          >
+            <InputNumber
+              className="converter__input"
+              onChange={onNumberChange}
+              autoFocus
+              value={typedAmount.value}
+              type="number"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              className="converter__swap-button"
+              onClick={() => {
+                updateCurrencyFrom(currencyTo);
+                updateCurrencyTo(currencyFrom);
+              }}
+              icon={<SwapOutlined />}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Select
+              onChange={(value) => {
+                updateCurrencyTo(value);
+                value === currencyFrom && updateCurrencyFrom(currencyTo);
+              }}
+              value={currencyTo}
+            >
+              {values.map((item) => (
+                <Option key={item.value} value={item.value}>
+                  {item.value}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              className="converter__exchange-button"
+              type="primary"
+              htmlType="submit"
+              icon={<ArrowRightOutlined />}
+              disabled={
+                !form.isFieldsTouched() ||
+                typedAmount.validateStatus === 'error'
+              }
+            />
+          </Form.Item>
+        </Row>
+      </Form>
       <div className="converter__result">
-        {() => form.validateFields()}
-        {console.log(form.getFieldError())}
-        {!hasValidationErrors && amount > 0 && (
+        {typedAmount.validateStatus === 'success' && (
           <Statistic
-            value={amount * exchangeRates[currencyTo]}
-            precision={2}
-            prefix="~"
-            suffix={currencySymbol(currencyTo)}
+            value={typedAmount.value * exchangeRates[currencyTo]}
+            prefix={currencySymbol(currencyTo)}
           />
         )}
       </div>
@@ -212,21 +197,15 @@ const mapDispatchToProps = (dispatch) => ({
   updateCurrencyTo: (updatedCurrency) => {
     dispatch(changeCurrencyTo(updatedCurrency));
   },
-  onChangeAmount: (updatedAmount) => {
-    dispatch(onChangeAmountField(updatedAmount));
-  },
-  onExchangeCurrency: () => {
-    dispatch(exchangeCurrency());
+  onExchangeCurrency: (number) => {
+    dispatch(exchangeCurrency(number));
   },
 });
 
 const mapStateToProps = (state) => ({
-  isLoaded: state.isLoaded,
   exchangeRates: state.exchangeRates,
   currencyFrom: state.currencyFrom,
   currencyTo: state.currencyTo,
-  amount: state.amount,
-  operationsHistory: state.operationsHistory,
   wallet: state.wallet,
 });
 

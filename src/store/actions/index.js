@@ -1,10 +1,6 @@
 import axios from 'axios';
 import types from './actionTypes';
 
-export function fetchData() {
-  return { type: types.FETCH_DATA };
-}
-
 export function setExchangeRates(exchangeRates) {
   return { type: types.SET_EXCHANGE_RATES, exchangeRates };
 }
@@ -15,10 +11,6 @@ export function changeCurrencyFrom(currencyFrom) {
 
 export function changeCurrencyTo(currencyTo) {
   return { type: types.CHANGE_CURRENCY_TO, currencyTo };
-}
-
-export function onChangeAmountField(amount) {
-  return { type: types.SET_AMOUNT, amount };
 }
 
 export function updateHistory(updatedHistory) {
@@ -32,7 +24,6 @@ export function updateWallet(updatedWallet) {
 export function fetchExchangeRates() {
   return async (dispatch, getState) => {
     const { currencyFrom } = getState();
-    dispatch(fetchData());
 
     const {
       data: { rates },
@@ -46,14 +37,13 @@ export function fetchExchangeRates() {
   };
 }
 
-export function exchangeCurrency(data) {
+export function exchangeCurrency(amount) {
   return (dispatch, getState) => {
     const {
       currencyFrom,
       currencyTo,
       operationsHistory,
       wallet,
-      amount,
       exchangeRates,
     } = getState();
 

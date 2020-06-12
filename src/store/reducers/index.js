@@ -23,7 +23,6 @@ const initialState = {
     USD: 1.1294,
     GBP: 0.8912,
   },
-  isLoaded: false,
   amount: null,
   currencyFrom: 'USD',
   currencyTo: 'EUR',
@@ -35,19 +34,11 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state,
         exchangeRates: action.exchangeRates,
-        isLoaded: true,
-      };
-    case types.SET_AMOUNT:
-      return {
-        ...state,
-        amount: action.amount,
       };
     case types.UPDATE_WALLET:
       return { ...state, wallet: action.updatedWallet };
     case types.UPDATE_HISTORY:
       return { ...state, operationsHistory: action.updatedHistory };
-    case types.FETCH_DATA:
-      return { ...state, isLoaded: false };
     case types.CHANGE_CURRENCY_FROM:
       return { ...state, currencyFrom: action.currencyFrom };
     case types.CHANGE_CURRENCY_TO:

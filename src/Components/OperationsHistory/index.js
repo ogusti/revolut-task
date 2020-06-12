@@ -1,31 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
-import {
-  fetchExchangeRates,
-  changeCurrencyFrom,
-  changeCurrencyTo,
-  onChangeAmountField,
-  exchangeCurrency,
-} from '../../store/actions';
 import { Layout } from 'antd';
 import './OperationsHistory.css';
 
 const { Footer } = Layout;
 
 const OperationsHistory = (props) => {
-  const {
-    fetchExchangeRatesData,
-    currencyFrom,
-    currencyTo,
-    wallet,
-    operationsHistory,
-  } = props;
-
-  useEffect(() => {
-    fetchExchangeRatesData();
-    // setInterval(() => fetchExchangeRatesData(), 10000);
-  }, [fetchExchangeRatesData, currencyFrom, currencyTo, wallet]);
+  const { operationsHistory } = props;
 
   return (
     <Footer>
@@ -49,32 +31,8 @@ const OperationsHistory = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchExchangeRatesData: () => {
-    dispatch(fetchExchangeRates());
-  },
-  updateCurrencyFrom: (updatedCurrency) => {
-    dispatch(changeCurrencyFrom(updatedCurrency));
-  },
-  updateCurrencyTo: (updatedCurrency) => {
-    dispatch(changeCurrencyTo(updatedCurrency));
-  },
-  onChangeAmount: (updatedAmount) => {
-    dispatch(onChangeAmountField(updatedAmount));
-  },
-  onExchangeCurrency: () => {
-    dispatch(exchangeCurrency());
-  },
-});
-
 const mapStateToProps = (state) => ({
-  isLoaded: state.isLoaded,
-  exchangeRates: state.exchangeRates,
-  currencyFrom: state.currencyFrom,
-  currencyTo: state.currencyTo,
-  amount: state.amount,
-  wallet: state.wallet,
   operationsHistory: state.operationsHistory,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OperationsHistory);
+export default connect(mapStateToProps)(OperationsHistory);
