@@ -2,9 +2,9 @@ import types from '../actions/actionTypes';
 
 const initialState = {
   wallet: {
-    EUR: { currency: 'EUR', amount: 200 },
-    USD: { currency: 'USD', amount: 12000 },
-    GBP: { currency: 'GBP', amount: 10 },
+    EUR: { currency: 'EUR', amount: 200, symbol: '€' },
+    USD: { currency: 'USD', amount: 12000, symbol: '$' },
+    GBP: { currency: 'GBP', amount: 10, symbol: '£' },
   },
   operationsHistory: [
     {

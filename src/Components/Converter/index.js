@@ -19,14 +19,8 @@ import { SwapOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import './Converter.css';
 
 const { Content } = Layout;
-
-const values = [
-  { value: 'USD', symbol: '$' },
-  { value: 'EUR', symbol: '€' },
-  { value: 'GBP', symbol: '£' },
-];
-
 const { Option } = Select;
+const { Item } = Form;
 
 const Converter = (props) => {
   const [typedAmount, setNumber] = useState({ value: null });
@@ -60,9 +54,7 @@ const Converter = (props) => {
       if (number > wallet[currencyFrom].amount) {
         return {
           validateStatus: 'error',
-          errorMessage: `Must be less then ${currencySymbol(currencyFrom)}${
-            wallet[currencyFrom].amount
-          }`,
+          errorMessage: `Must be less then ${wallet[currencyFrom].symbol}${wallet[currencyFrom].amount}`,
         };
       } else
         return {
@@ -91,24 +83,27 @@ const Converter = (props) => {
     typedAmount.value !== null && onNumberChange(typedAmount.value);
   }, [currencyFrom, currencyTo, typedAmount.value, onNumberChange]);
 
-  const currencySymbol = (currency) =>
-    values.find(({ value }) => value === currency).symbol;
-
   const onFinish = () => {
     form.resetFields();
     setNumber({ value: null });
     onExchangeCurrency(typedAmount.value);
   };
 
+  const currenciesDropdown = Object.entries(wallet).map(([key, value]) => (
+    <Option key={value.currency} value={value.currency}>
+      {value.currency}
+    </Option>
+  ));
+
   return (
     <Content className="converter">
       <div>
-        1 {currencySymbol(currencyFrom)} = {exchangeRates[currencyTo]}{' '}
-        {currencySymbol(currencyTo)}
+        1 {wallet[currencyFrom].symbol} = {exchangeRates[currencyTo]}{' '}
+        {wallet[currencyTo].symbol}
       </div>
       <Form onFinish={onFinish} size="large" form={form}>
         <Row>
-          <Form.Item>
+          <Item>
             <Select
               onChange={(value) => {
                 updateCurrencyFrom(value);
@@ -116,14 +111,10 @@ const Converter = (props) => {
               }}
               value={currencyFrom}
             >
-              {values.map((item) => (
-                <Option key={item.value} value={item.value}>
-                  {item.value}
-                </Option>
-              ))}
+              {currenciesDropdown}
             </Select>
-          </Form.Item>
-          <Form.Item
+          </Item>
+          <Item
             name="amountValue"
             validateStatus={typedAmount.validateStatus}
             help={typedAmount.errorMessage}
@@ -134,9 +125,10 @@ const Converter = (props) => {
               autoFocus
               value={typedAmount.value}
               type="number"
+              step={0.1}
             />
-          </Form.Item>
-          <Form.Item>
+          </Item>
+          <Item>
             <Button
               className="converter__swap-button"
               onClick={() => {
@@ -145,8 +137,8 @@ const Converter = (props) => {
               }}
               icon={<SwapOutlined />}
             />
-          </Form.Item>
-          <Form.Item>
+          </Item>
+          <Item>
             <Select
               onChange={(value) => {
                 updateCurrencyTo(value);
@@ -154,14 +146,10 @@ const Converter = (props) => {
               }}
               value={currencyTo}
             >
-              {values.map((item) => (
-                <Option key={item.value} value={item.value}>
-                  {item.value}
-                </Option>
-              ))}
+              {currenciesDropdown}
             </Select>
-          </Form.Item>
-          <Form.Item>
+          </Item>
+          <Item>
             <Button
               className="converter__exchange-button"
               type="primary"
@@ -172,14 +160,14 @@ const Converter = (props) => {
                 typedAmount.validateStatus === 'error'
               }
             />
-          </Form.Item>
+          </Item>
         </Row>
       </Form>
       <div className="converter__result">
         {typedAmount.validateStatus === 'success' && (
           <Statistic
             value={typedAmount.value * exchangeRates[currencyTo]}
-            prefix={currencySymbol(currencyTo)}
+            prefix={wallet[currencyTo].symbol}
           />
         )}
       </div>
