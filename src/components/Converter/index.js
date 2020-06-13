@@ -51,6 +51,25 @@ const Converter = (props) => {
           errorMessage: 'Must be more than 0 ',
         };
       }
+
+      const moreThanTwoDigitsAfterDecimal = (value) => {
+        const isInt = value % 1 === 0;
+        if (isInt) {
+          return false;
+        } else {
+          const toString = value.toString();
+          const [, decimals] = toString.split('.');
+          return decimals.length > 2;
+        }
+      };
+
+      if (moreThanTwoDigitsAfterDecimal(number)) {
+        return {
+          validateStatus: 'error',
+          errorMessage: 'Must be less than two digits after decimal',
+        };
+      }
+
       if (number > wallet[currencyFrom].amount) {
         return {
           validateStatus: 'error',
@@ -90,7 +109,7 @@ const Converter = (props) => {
     onExchangeCurrency(typedAmount.value);
   };
 
-  const currenciesDropdown = Object.entries(wallet).map(([key, value]) => (
+  const currenciesDropdown = Object.entries(wallet).map(([, value]) => (
     <Option key={value.currency} value={value.currency}>
       {value.currency}
     </Option>
