@@ -15,8 +15,9 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
-    "redux-thunks": "^1.0.0"
+    "sinon": "^9.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
