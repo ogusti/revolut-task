@@ -8,20 +8,49 @@ const initialState = {
   },
   operationsHistory: [
     {
-      from: { currency: 'GBP', amount: 100, symbol: '£' },
-      to: { currency: 'USD', amount: 120, symbol: '$' },
-      date: 1591604300973,
+      from: {
+        currency: 'GBP',
+        amount: 10,
+        symbol: '£',
+      },
+      to: {
+        currency: 'USD',
+        amount: 12.608613209,
+        symbol: '$',
+      },
+      date: 1592134794051,
     },
     {
-      from: { currency: 'USD', amount: 23, symbol: '$' },
-      to: { currency: 'EUR', amount: 4, symbol: '€' },
-      date: 1591604300973,
+      from: {
+        currency: 'EUR',
+        amount: 120,
+        symbol: '€',
+      },
+      to: {
+        currency: 'USD',
+        amount: 135.648,
+        symbol: '$',
+      },
+      date: 1592134763930,
+    },
+    {
+      from: {
+        currency: 'USD',
+        amount: 23,
+        symbol: '$',
+      },
+      to: {
+        currency: 'EUR',
+        amount: 4,
+        symbol: '€',
+      },
+      date: 1592130331240,
     },
   ],
   exchangeRates: {
-    EUR: null,
-    USD: null,
-    GBP: null,
+    EUR: null, //?
+    USD: null, //?
+    GBP: null, //?
   },
   currencyFrom: 'USD',
   currencyTo: 'EUR',

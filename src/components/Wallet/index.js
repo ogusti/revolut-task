@@ -1,30 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Layout } from 'antd';
+import { Layout, Card, Statistic } from 'antd';
 import './Wallet.css';
 
 const { Header } = Layout;
 
 const Wallet = ({ wallet }) => (
   <Header className="wallet">
-    <div className="wallet__card">
-      <div>{wallet.EUR.currency}</div>
-      <div>
-        {wallet.EUR.amount} {wallet.EUR.symbol}
-      </div>
-    </div>
-    <div className="wallet__card">
-      <div>{wallet.USD.currency}</div>
-      <div>
-        {wallet.USD.amount} {wallet.USD.symbol}
-      </div>
-    </div>
-    <div className="wallet__card">
-      <div>{wallet.GBP.currency}</div>
-      <div>
-        {wallet.GBP.amount} {wallet.GBP.symbol}
-      </div>
-    </div>
+    <Card size="small" className="wallet__card">
+      <Statistic
+        title={wallet.EUR.currency}
+        value={wallet.EUR.amount}
+        prefix={wallet.EUR.symbol}
+      />
+    </Card>
+    <Card size="small" className="wallet__card">
+      <Statistic
+        title={wallet.USD.currency}
+        value={wallet.USD.amount}
+        prefix={wallet.USD.symbol}
+      />
+    </Card>
+    <Card size="small" className="wallet__card">
+      <Statistic
+        title={wallet.GBP.currency}
+        value={wallet.GBP.amount}
+        prefix={wallet.GBP.symbol}
+      />
+    </Card>
   </Header>
 );
 

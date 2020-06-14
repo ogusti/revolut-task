@@ -140,7 +140,10 @@ describe('store', () => {
     });
 
     const expected = [
-      { type: types.SET_EXCHANGE_RATES, exchangeRates: data.rates },
+      {
+        type: types.SET_EXCHANGE_RATES,
+        exchangeRates: data.rates,
+      },
     ];
 
     store

@@ -5,18 +5,11 @@
   flex-wrap: wrap;
   border-bottom: 1px solid #f0f0f0;
   background-color: white;
-  min-height: 60px;
+  min-height: 120px;
+  height: max-content;
 }
 
 .wallet__card {
-  min-width: 100px;
-  height: 40px;
-  background-color: #1890ff;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  color: white;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  line-height: normal;
+  min-width: 180px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
 }

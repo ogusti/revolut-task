@@ -1,26 +1,8 @@
-.history__wrap {
+.history {
   background-color: white;
-  padding: 10px 0 0 0;
 }
 
 .history__divider {
   color: '#333' !important;
-  font-weight: normal !important;
   font-size: 14px !important;
-}
-
-.history {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  list-style: none;
-  background-color: white;
-}
-
-.history__operation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
 }

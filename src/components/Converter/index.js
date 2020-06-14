@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 import {
   fetchExchangeRates,
   changeCurrencyFrom,
@@ -14,8 +15,13 @@ import {
   Form,
   Statistic,
   InputNumber,
+  Tooltip,
 } from 'antd';
-import { SwapOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import {
+  SwapOutlined,
+  ArrowRightOutlined,
+  InfoCircleTwoTone,
+} from '@ant-design/icons';
 import './Converter.css';
 
 const { Content } = Layout;
@@ -24,6 +30,7 @@ const { Item } = Form;
 
 const Converter = (props) => {
   const [typedAmount, setNumber] = useState({ value: null });
+  const [lastUpdate, setLastUpdate] = useState(null);
   const [form] = Form.useForm();
 
   const {
@@ -93,10 +100,12 @@ const Converter = (props) => {
 
   useEffect(() => {
     getExchangeRates();
-
-    // const interval = setInterval(() => getExchangeRates(), 10000);
-
-    // return () => clearInterval(interval);
+    setLastUpdate(Date.now());
+    const interval = setInterval(() => {
+      getExchangeRates();
+      setLastUpdate(Date.now());
+    }, 10000);
+    return () => clearInterval(interval);
   }, [getExchangeRates, currencyFrom]);
 
   useEffect(() => {
@@ -118,8 +127,25 @@ const Converter = (props) => {
   return (
     <Content className="converter">
       <div className="converter__currency-rate">
-        1 {wallet[currencyFrom].symbol} = {exchangeRates[currencyTo]}{' '}
-        {wallet[currencyTo].symbol}
+        <Statistic
+          className="converter__currency-rate-from"
+          prefix={wallet[currencyFrom].symbol}
+          value={1}
+          suffix="="
+        />
+        <Statistic
+          prefix={wallet[currencyTo].symbol}
+          value={exchangeRates[currencyTo]}
+          suffix={
+            <Tooltip
+              title={
+                <span>updated at {dayjs(lastUpdate).format('HH:mm:ss')}</span>
+              }
+            >
+              <InfoCircleTwoTone />
+            </Tooltip>
+          }
+        />
       </div>
       <Form onFinish={onFinish} size="large" form={form}>
         <Row>
