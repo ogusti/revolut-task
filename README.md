@@ -30,6 +30,7 @@ $ yarn test --watchAll
 ## To Do List
 
 - Accessibility
+- Better perfomance
 - Full test coverage
 - Responsive layout
 - Typescript
