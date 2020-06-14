@@ -16,23 +16,37 @@ const columns = [
   },
   {
     title: 'Exchanges from',
-    dataIndex: 'from',
-    key: 'from',
-    render: ({ currency, amount }) => (
-      <div>
-        -{amount} {currency}
-      </div>
-    ),
+    children: [
+      {
+        title: 'Currency',
+        dataIndex: 'from',
+        key: 'from',
+        render: ({ currency, amount }) => <div>{currency}</div>,
+      },
+      {
+        title: 'Amount',
+        dataIndex: 'from',
+        key: 'from',
+        render: ({ currency, amount }) => <div>-{amount}</div>,
+      },
+    ],
   },
   {
     title: 'Exchanges to',
-    dataIndex: 'to',
-    key: 'to',
-    render: ({ currency, amount }) => (
-      <div>
-        +{amount} {currency}
-      </div>
-    ),
+    children: [
+      {
+        title: 'Currency',
+        dataIndex: 'to',
+        key: 'to',
+        render: ({ currency, amount }) => <div>{currency}</div>,
+      },
+      {
+        title: 'Amount',
+        dataIndex: 'to',
+        key: 'to',
+        render: ({ currency, amount }) => <div>+{amount}</div>,
+      },
+    ],
   },
 ];
 
@@ -45,9 +59,9 @@ const OperationsHistory = ({ operationsHistory }) => {
   return (
     <Footer className="history">
       <Divider orientation="left" className="history__divider">
-        history of exchanges
+        History of exchanges
       </Divider>
-      <Table columns={columns} dataSource={operationsWithIds} />
+      <Table bordered columns={columns} dataSource={operationsWithIds} />
     </Footer>
   );
 };
