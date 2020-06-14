@@ -1,4 +1,4 @@
-# [Currency Exchange App](https://revolut-task.mishaishikawa.vercel.app/)
+# [Currency Exchange App](https://revolut-task.now.sh)
 
 Quick Start
 
@@ -26,3 +26,10 @@ $ yarn test --watchAll
 | **git**  |         `2.0.0` |
 | **node** |        `12.0.0` |
 | **yarn** |         `1.0.0` |
+
+## To Do List
+
+- Accessibility
+- Full test coverage
+- Responsive layout
+- Typescript
