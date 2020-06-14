@@ -16,7 +16,7 @@ $ yarn
 $ yarn start # Opens browser at http://localhost:3000
 
 # Development test watcher
-$ yarn test
+$ yarn test --watchAll
 ```
 
 ### System Dependencies
