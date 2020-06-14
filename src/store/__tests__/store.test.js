@@ -132,11 +132,7 @@ axiosGet
 describe('store', () => {
   it('should fetch data, and than set that data in store', () => {
     const store = mockStore({
-      exchangeRates: {
-        EUR: null,
-        USD: null,
-        GBP: null,
-      },
+      exchangeRates: {},
     });
 
     const expected = [

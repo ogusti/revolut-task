@@ -136,6 +136,7 @@ const Converter = (props) => {
         <Statistic
           prefix={wallet[currencyTo].symbol}
           value={exchangeRates[currencyTo]}
+          precision={5}
           suffix={
             <Tooltip
               title={
@@ -214,6 +215,7 @@ const Converter = (props) => {
           <Statistic
             value={typedAmount.value * exchangeRates[currencyTo]}
             prefix={wallet[currencyTo].symbol}
+            precision={2}
           />
         )}
       </div>

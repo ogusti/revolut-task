@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
-import { Layout, Divider, Table } from 'antd';
+import { Layout, Divider, Table, Statistic } from 'antd';
 import './OperationsHistory.css';
 
 const { Footer } = Layout;
@@ -21,13 +21,17 @@ const columns = [
         title: 'Currency',
         dataIndex: 'from',
         key: 'from',
-        render: ({ currency, amount }) => <div>{currency}</div>,
+        render: ({ currency, symbol }) => (
+          <Statistic value={symbol} suffix={currency} />
+        ),
       },
       {
         title: 'Amount',
         dataIndex: 'from',
         key: 'from',
-        render: ({ currency, amount }) => <div>-{amount}</div>,
+        render: ({ amount }) => (
+          <Statistic precision={2} value={amount} prefix="-" />
+        ),
       },
     ],
   },
@@ -38,13 +42,17 @@ const columns = [
         title: 'Currency',
         dataIndex: 'to',
         key: 'to',
-        render: ({ currency, amount }) => <div>{currency}</div>,
+        render: ({ symbol, currency }) => (
+          <Statistic value={symbol} suffix={currency} />
+        ),
       },
       {
         title: 'Amount',
         dataIndex: 'to',
         key: 'to',
-        render: ({ currency, amount }) => <div>+{amount}</div>,
+        render: ({ amount }) => (
+          <Statistic precision={2} value={amount} prefix="+" />
+        ),
       },
     ],
   },

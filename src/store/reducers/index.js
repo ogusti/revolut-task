@@ -47,11 +47,7 @@ const initialState = {
       date: 1592130331240,
     },
   ],
-  exchangeRates: {
-    EUR: null, //?
-    USD: null, //?
-    GBP: null, //?
-  },
+  exchangeRates: {},
   currencyFrom: 'USD',
   currencyTo: 'EUR',
 };
