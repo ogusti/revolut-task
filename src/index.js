@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import reducers from './store/reducers';
-import { Provider } from 'react-redux';
+import App from './App';
+import './index.css';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
