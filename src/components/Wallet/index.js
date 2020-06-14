@@ -7,8 +7,8 @@ const { Header } = Layout;
 
 const Wallet = ({ wallet }) => (
   <Header className="wallet">
-    {Object.entries(wallet).map(([, value]) => (
-      <Card size="small" className="wallet__card">
+    {Object.entries(wallet).map(([, value], index) => (
+      <Card key={index} size="small" className="wallet__card">
         <Statistic
           precision={2}
           title={value.currency}

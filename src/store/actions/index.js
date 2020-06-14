@@ -21,19 +21,27 @@ export function updateWallet(updatedWallet) {
   return { type: types.UPDATE_WALLET, updatedWallet };
 }
 
+export function setError() {
+  return { type: types.SET_ERROR };
+}
+
 export function fetchExchangeRates() {
   return async (dispatch, getState) => {
     const { currencyFrom } = getState();
 
-    const {
-      data: { rates },
-    } = await axios.get('https://api.exchangeratesapi.io/latest', {
-      params: {
-        base: currencyFrom,
-      },
-    });
-
-    dispatch(setExchangeRates(rates));
+    try {
+      const {
+        data: { rates },
+      } = await axios.get('https://api.exchangeratesapi.io/latest', {
+        params: {
+          base: currencyFrom,
+        },
+      });
+      dispatch(setExchangeRates(rates));
+    } catch (err) {
+      console.log(err.message);
+      dispatch(setError());
+    }
   };
 }
 

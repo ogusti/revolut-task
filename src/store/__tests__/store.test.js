@@ -9,6 +9,7 @@ import {
   changeCurrencyFrom,
   updateHistory,
   updateWallet,
+  setError,
 } from '../actions';
 
 const data = {
@@ -173,5 +174,9 @@ describe('store', () => {
 
   it('should update history ', () => {
     expect(updateHistory(updatedHistory)).toEqual(historyAction);
+  });
+
+  it('should make error ', () => {
+    expect(setError({ type: 'SET_ERROR' })).toEqual({ type: 'SET_ERROR' });
   });
 });
