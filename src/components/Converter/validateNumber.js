@@ -33,7 +33,7 @@ const validateNumber = (wallet, currencyFrom, number) => {
   if (number > wallet[currencyFrom].amount) {
     return {
       validateStatus: 'error',
-      errorMessage: `Must be less then ${wallet[currencyFrom].symbol}${wallet[currencyFrom].amount}`,
+      errorMessage: `Must be less than ${wallet[currencyFrom].symbol}${wallet[currencyFrom].amount}`,
     };
   } else
     return {
